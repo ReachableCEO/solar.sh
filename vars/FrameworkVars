@@ -1,0 +1,5 @@
+#Global Variables used by the framework
+
+export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+export ProjectIncludes="0"
+export PreflightCheck="0"

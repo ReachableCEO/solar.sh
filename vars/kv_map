@@ -1,0 +1,19 @@
+#Place (primary/unique) key as very first argument on each record below
+
+#Value Fields are (in order), (reference KEY_(VARIABLE) names in the code):
+#1)valuex (description)
+#2)valuey (description)
+#3)valuez (description)
+
+#An example:
+#unique key of serverfqdn
+#key of: subnet , value of: 10.10.10.0/24
+#key of: gateway, value of: 10.10.10.1
+
+#serverfqdn,10.10.10.0/24,10.10.10.1
+
+#Place your records below:
+
+#primary/uniquekey,#value
+primarykey1,valuex,valuey,valuez
+primarykey2,valuex,valuey,valuez
