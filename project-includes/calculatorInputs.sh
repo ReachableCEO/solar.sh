@@ -55,3 +55,10 @@ export BATT_VOLTAGE=""
 # Generator variables
 ######################################
 
+
+######################################
+#Capital variables
+######################################
+
+export CAPEX_BUDGET_MIN=""
+export CAPEX_BUDGET_MAX=""
