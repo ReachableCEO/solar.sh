@@ -451,13 +451,14 @@ def export_project_data(project_id):
             "project_name": row[4],
             "location_lat": float(row[5]) if row[5] else None,
             "location_lon": float(row[6]) if row[6] else None,
-            "metadata": row[7] if row[7] else {},
+            "lidar_geom": str(row[7]) if row[7] else None,
+            "metadata": row[8] if row[8] else {},
             "calculation_data": {
-                "annual_kwh": float(row[8]) if row[8] else None,
-                "shading_loss_pct": float(row[9]) if row[9] else None,
-                "financial_data": row[10] if row[10] else {},
-                "created_at": row[11].isoformat() if row[11] else None
-            } if row[8] else None,
+                "annual_kwh": float(row[9]) if row[9] else None,
+                "shading_loss_pct": float(row[10]) if row[10] else None,
+                "financial_data": row[11] if row[11] else {},
+                "created_at": row[12].isoformat() if row[12] else None
+            } if row[9] else None,
             "export_timestamp": time.time(),
             "gdpr_compliant": True
         }
@@ -468,8 +469,10 @@ def export_project_data(project_id):
         return jsonify(export_data), 200
 
     except Exception as e:
+        import traceback
         audit_log('data_export_error', f'project:{project_id}', details={'error': str(e)})
         logger.error(f"Data export error: {e}")
+        logger.error(f"Traceback: {traceback.format_exc()}")
         return jsonify({"error": "Failed to export project data"}), 500
 
 if __name__ == '__main__':

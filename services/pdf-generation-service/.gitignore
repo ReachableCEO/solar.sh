@@ -16,3 +16,6 @@ venv/
 *.swp
 *~
 #*#
+
+test_report.pdf
+test_summary.pdf

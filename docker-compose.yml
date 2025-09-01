@@ -1,4 +1,4 @@
-version: '3.8'
+# Removed obsolete version attribute as per Docker Compose V2
 
 services:
   api-gateway:
@@ -25,6 +25,8 @@ services:
 
   calculation-service:
     build: ./services/calculation-service
+    ports:
+      - "5001:5001"  # Expose for debugging/direct access
     depends_on:
       db:
         condition: service_healthy
@@ -38,6 +40,8 @@ services:
 
   pdf-generation-service:
     build: ./services/pdf-generation-service
+    ports:
+      - "5002:5002"  # Expose for debugging/direct access
     depends_on:
       db:
         condition: service_healthy
@@ -51,6 +55,8 @@ services:
 
   payment-service:
     build: ./services/payment-service
+    ports:
+      - "5003:5003"  # Expose for debugging/direct access
     depends_on:
       db:
         condition: service_healthy

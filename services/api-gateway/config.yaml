@@ -7,10 +7,14 @@ apisix:
 plugins:
   - payment-gate
 
-data_store:
-  default:
-    uri:
-      - "http://etcd:2379"
+deployment:
+  role: traditional
+  role_traditional:
+    config_provider: etcd
+
+etcd:
+  host:
+    - "http://etcd:2379"
 
 # Add a route for the calculation service
 routes:
