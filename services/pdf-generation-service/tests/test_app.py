@@ -190,18 +190,19 @@ class TestApp(unittest.TestCase):
 
         # Mock project and calculation data for export
         mock_cursor.fetchone.return_value = (
-            '12345678-1234-5678-9012-123456789012', # id
-            datetime(2023, 1, 1, 10, 0, 0), # created_at
-            'paid', # status
-            10000.0, # cost_usd
-            'Test Project', # project_name
-            35.79, # location_lat
-            -78.78, # location_lon
-            json.dumps({'key': 'value'}), # metadata (JSONB)
-            10000.0, # annual_kwh
-            0.05, # shading_loss_pct
-            json.dumps({'financial_key': 'financial_value'}), # financial_data (JSONB)
-            datetime(2023, 1, 1, 11, 0, 0) # calc_created_at
+            '12345678-1234-5678-9012-123456789012', # id (0)
+            datetime(2023, 1, 1, 10, 0, 0), # created_at (1)
+            'paid', # status (2)
+            10000.0, # cost_usd (3)
+            'Test Project', # project_name (4)
+            35.79, # location_lat (5)
+            -78.78, # location_lon (6)
+            'POINT (1 1)', # lidar_geom (7)
+            json.dumps({'key': 'value'}), # metadata (JSONB) (8)
+            10000.0, # annual_kwh (9)
+            0.05, # shading_loss_pct (10)
+            json.dumps({'financial_key': 'financial_value'}), # financial_data (JSONB) (11)
+            datetime(2023, 1, 1, 11, 0, 0) # calc_created_at (12)
         )
 
         response = self.app.get('/api/data/export/12345678-1234-5678-9012-123456789012')
