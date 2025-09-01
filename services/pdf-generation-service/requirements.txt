@@ -1,5 +1,8 @@
 Flask
+Flask-Caching
+Flask-Limiter
 Jinja2
 WeasyPrint
 psycopg2-binary
 python-dotenv
+cryptography

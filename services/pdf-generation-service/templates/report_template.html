@@ -1,37 +1,336 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Solar Report - {{ report.project_name }}</title>
+    <title>Solar Energy Report - {{ report.project_name }}</title>
     <style>
-        body { font-family: sans-serif; margin: 20px; }
-        h1 { color: #333; }
-        .section { margin-bottom: 20px; border: 1px solid #eee; padding: 15px; border-radius: 5px; }
-        .section h2 { color: #555; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 0; }
-        .data-item { margin-bottom: 10px; }
-        .data-item strong { display: inline-block; width: 150px; }
-        .footer { text-align: center; margin-top: 30px; font-size: 0.8em; color: #777; }
+        @page {
+            size: A4;
+            margin: 0.75in;
+            @bottom-right {
+                content: "Page " counter(page) " of " counter(pages);
+                font-size: 9pt;
+                color: #666;
+            }
+        }
+
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            font-size: 11pt;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #2E8B57;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #2E8B57;
+            font-size: 24pt;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .header .subtitle {
+            color: #666;
+            font-size: 14pt;
+            margin: 5px 0 0 0;
+        }
+
+        .section {
+            margin-bottom: 25px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #2E8B57, #3CB371);
+            color: white;
+            padding: 12px 15px;
+            margin: 0;
+            font-size: 14pt;
+            font-weight: bold;
+        }
+
+        .section-content {
+            padding: 20px;
+        }
+
+        .data-grid {
+            display: table;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .data-row {
+            display: table-row;
+        }
+
+        .data-row:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .data-label {
+            display: table-cell;
+            padding: 8px 12px;
+            font-weight: bold;
+            width: 35%;
+            border-right: 1px solid #e0e0e0;
+            background-color: #f5f5f5;
+        }
+
+        .data-value {
+            display: table-cell;
+            padding: 8px 12px;
+        }
+
+        .metric-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 18pt;
+            font-weight: bold;
+            color: #2E8B57;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-size: 10pt;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metrics-grid {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .metric-item {
+            flex: 1;
+        }
+
+        .financial-summary {
+            background: #fff8e1;
+            border: 1px solid #ffe082;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .financial-summary h3 {
+            color: #f57c00;
+            margin-top: 0;
+            font-size: 12pt;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 9pt;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .status-paid {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 9pt;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .disclaimer {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 12px;
+            margin: 20px 0;
+            font-size: 9pt;
+            color: #856404;
+        }
+
+        .highlight {
+            background-color: #e8f5e8;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
     </style>
 </head>
 <body>
-    <h1>Solar Report: {{ report.project_name }}</h1>
-
-    <div class="section">
-        <h2>Project Details</h2>
-        <div class="data-item"><strong>Project ID:</strong> {{ report.project_id }}</div>
-        <div class="data-item"><strong>Status:</strong> {{ report.status }}</div>
-        <div class="data-item"><strong>Location:</strong> Lat {{ report.location.lat }}, Lon {{ report.location.lon }}</div>
-        <div class="data-item"><strong>Estimated Cost:</strong> ${{ "%.2f" | format(report.cost_usd) }}</div>
+    <div class="header">
+        <h1>Solar Energy Analysis Report</h1>
+        <div class="subtitle">{{ report.project_name }}</div>
     </div>
 
     <div class="section">
-        <h2>Calculation Results</h2>
-        <div class="data-item"><strong>Annual Energy Yield:</strong> {{ "%.2f" | format(report.annual_kwh) }} kWh</div>
-        <div class="data-item"><strong>Shading Loss:</strong> {{ "%.2f" | format(report.shading_loss_pct * 100) }}%</div>
-        <div class="data-item"><strong>Financial Data:</strong> {{ report.financial_data | tojson }}</div>
+        <h2 class="section-header">Project Overview</h2>
+        <div class="section-content">
+            <div class="data-grid">
+                <div class="data-row">
+                    <div class="data-label">Project ID</div>
+                    <div class="data-value">{{ report.project_id }}</div>
+                </div>
+                <div class="data-row">
+                    <div class="data-label">Project Name</div>
+                    <div class="data-value">{{ report.project_name }}</div>
+                </div>
+                <div class="data-row">
+                    <div class="data-label">Status</div>
+                    <div class="data-value">
+                        <span class="status-badge status-{{ report.status.lower() }}">{{ report.status }}</span>
+                    </div>
+                </div>
+                <div class="data-row">
+                    <div class="data-label">Location</div>
+                    <div class="data-value">
+                        Latitude: {{ "%.4f" | format(report.location.lat) }}<br>
+                        Longitude: {{ "%.4f" | format(report.location.lon) }}
+                    </div>
+                </div>
+                <div class="data-row">
+                    <div class="data-label">Project Created</div>
+                    <div class="data-value">{{ report.project_created_at or 'N/A' }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-header">Energy Production Analysis</h2>
+        <div class="section-content">
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <div class="metric-card">
+                        <div class="metric-value">{{ "%.0f" | format(report.annual_kwh) }}</div>
+                        <div class="metric-label">Annual Energy Yield (kWh)</div>
+                    </div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-card">
+                        <div class="metric-value">{{ "%.0f" | format(report.net_annual_kwh) }}</div>
+                        <div class="metric-label">Net Annual Production (kWh)</div>
+                    </div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-card">
+                        <div class="metric-value">{{ "%.1f" | format(report.shading_loss_pct * 100) }}%</div>
+                        <div class="metric-label">Shading Loss</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="data-grid">
+                <div class="data-row">
+                    <div class="data-label">Gross Annual Production</div>
+                    <div class="data-value"><span class="highlight">{{ "%.2f" | format(report.annual_kwh) }} kWh</span></div>
+                </div>
+                <div class="data-row">
+                    <div class="data-label">Shading Losses</div>
+                    <div class="data-value">{{ "%.2f" | format(report.shading_loss_pct * 100) }}%</div>
+                </div>
+                <div class="data-row">
+                    <div class="data-label">Net Production</div>
+                    <div class="data-value"><span class="highlight">{{ "%.2f" | format(report.net_annual_kwh) }} kWh</span></div>
+                </div>
+                <div class="data-row">
+                    <div class="data-label">Calculation Date</div>
+                    <div class="data-value">{{ report.calculation_created_at or 'N/A' }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-header">Financial Analysis</h2>
+        <div class="section-content">
+            <div class="financial-summary">
+                <h3>Investment Summary</h3>
+                <div class="data-grid">
+                    <div class="data-row">
+                        <div class="data-label">Total System Cost</div>
+                        <div class="data-value"><strong>${{ "%.2f" | format(report.cost_usd) }}</strong></div>
+                    </div>
+                    <div class="data-row">
+                        <div class="data-label">Cost per kWh</div>
+                        <div class="data-value">${{ "%.3f" | format(report.cost_per_kwh) }}</div>
+                    </div>
+                </div>
+            </div>
+
+            {% if report.financial_data %}
+            <div class="data-grid">
+                {% for key, value in report.financial_data.items() %}
+                <div class="data-row">
+                    <div class="data-label">{{ key | replace('_', ' ') | title }}</div>
+                    <div class="data-value">
+                        {% if value is number %}
+                            {% if 'cost' in key.lower() or 'price' in key.lower() %}
+                                ${{ "%.2f" | format(value) }}
+                            {% elif 'rate' in key.lower() or 'ratio' in key.lower() %}
+                                {{ "%.3f" | format(value) }}
+                            {% else %}
+                                {{ "%.2f" | format(value) }}
+                            {% endif %}
+                        {% else %}
+                            {{ value }}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if report.metadata %}
+    <div class="section">
+        <h2 class="section-header">Additional Project Information</h2>
+        <div class="section-content">
+            <div class="data-grid">
+                {% for key, value in report.metadata.items() %}
+                <div class="data-row">
+                    <div class="data-label">{{ key | replace('_', ' ') | title }}</div>
+                    <div class="data-value">{{ value }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="disclaimer">
+        <strong>Disclaimer:</strong> This report is based on the data and calculations available at the time of generation.
+        Actual performance may vary due to weather conditions, equipment maintenance, and other factors.
+        Please consult with a qualified solar professional for final system design and installation.
     </div>
 
     <div class="footer">
-        Report generated on {{ report.generation_date }}. Data accurate as of report generation.
+        <strong>Sol-Calc.com Solar Energy Analysis Report</strong><br>
+        Generated on {{ report.generation_date }}<br>
+        Project ID: {{ report.project_id }}<br>
+        <em>For professional solar planning and accurate system design</em>
     </div>
 </body>
 </html>

@@ -12,6 +12,11 @@ services:
         condition: service_healthy
     environment:
       APISIX_ETCD_HOST: etcd:2379
+      PG_HOST: db
+      PG_PORT: 5432
+      PG_USER: ${POSTGRES_USER:-user}
+      PG_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      PG_DBNAME: ${POSTGRES_DB:-solcalc}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9080"]
       interval: 30s

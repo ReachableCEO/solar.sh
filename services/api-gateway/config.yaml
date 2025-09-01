@@ -4,6 +4,9 @@ apisix:
   # Set the proxy protocol header
   proxy_protocol_header: "X-Real-IP"
 
+plugins:
+  - payment-gate
+
 data_store:
   default:
     uri:
@@ -26,6 +29,8 @@ routes:
 
 # Add a route for the download service
   - uri: /api/download/*
+    plugins:
+      payment-gate: ~
     upstream:
       nodes:
         "pdf-generation-service:5002": 1
