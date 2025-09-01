@@ -4,6 +4,11 @@ apisix:
   # Set the proxy protocol header
   proxy_protocol_header: "X-Real-IP"
 
+data_store:
+  default:
+    uri:
+      - "http://etcd:2379"
+
 # Add a route for the calculation service
 routes:
   - uri: /api/calculate

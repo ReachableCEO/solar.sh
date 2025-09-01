@@ -8,6 +8,10 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      etcd:
+        condition: service_healthy
+    environment:
+      APISIX_ETCD_HOST: etcd:2379
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9080"]
       interval: 30s
@@ -66,6 +70,19 @@ services:
       timeout: 10s
       retries: 3
 
+  etcd:
+    image: bitnami/etcd:latest
+    environment:
+      ALLOW_NONE_AUTHENTICATION: "yes"
+      ETCD_ADVERTISE_CLIENT_URLS: http://etcd:2379
+      ETCD_LISTEN_CLIENT_URLS: http://0.0.0.0:2379
+    healthcheck:
+      test: ["CMD", "etcdctl", "endpoint", "health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
   db:
     image: postgis/postgis:15-3.3
     environment:
@@ -75,7 +92,7 @@ services:
     volumes:
       - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     ports:
-      - "5432:5432" # Expose DB port for local access if needed
+      - "5433:5432" # Expose DB port for local access if needed
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-user} -d ${POSTGRES_DB:-solcalc}"]
       interval: 10s
