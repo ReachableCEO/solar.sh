@@ -1,0 +1,6 @@
+Flask
+laspy
+pvlib
+psycopg2-binary
+python-dotenv
+Shapely

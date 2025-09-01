@@ -1,0 +1,5 @@
+Flask
+Jinja2
+WeasyPrint
+psycopg2-binary
+python-dotenv
