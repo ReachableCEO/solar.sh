@@ -60,6 +60,20 @@ It is recommended to use a `.env` file for local development.
 
 ### Docker
 
+This service is part of a larger microservices architecture managed by `docker-compose.yml` at the project root. To run the entire stack:
+
+1.  **Navigate to the project root directory:**
+    ```bash
+    cd ../..
+    ```
+2.  **Bring up the Docker Compose stack:**
+    ```bash
+    docker compose up -d --build
+    ```
+    *Ensure your `.env` file at the project root is correctly configured as described above.*
+
+Alternatively, to run only this service with Docker (for isolated testing/development):
+
 1.  **Navigate to the service directory:**
     ```bash
     cd services/calculation-service

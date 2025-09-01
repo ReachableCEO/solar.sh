@@ -31,6 +31,13 @@ routes:
         "payment-service:5003": 1
       type: roundrobin
 
+# Add a route for Stripe webhooks
+  - uri: /webhooks/stripe
+    upstream:
+      nodes:
+        "payment-service:5003": 1
+      type: roundrobin
+
 # Add a route for the download service
   - uri: /api/download/*
     plugins:

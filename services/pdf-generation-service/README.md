@@ -4,7 +4,7 @@ This service is responsible for generating comprehensive PDF reports based on pr
 
 ## API Endpoints
 
-*   **GET /api/download/:project_id:** Generates and provides a PDF report for the specified project ID.
+*   **GET /api/download/:project_id:** Generates and provides a PDF report for the specified project ID. This endpoint is exposed via the API Gateway, which also handles payment gating.
     *   **Parameters:**
         *   `project_id` (UUID) - The ID of the project for which to generate the report.
         *   `format` (optional) - Report format: 'detailed' (default) or 'summary'
@@ -22,6 +22,14 @@ This service is responsible for generating comprehensive PDF reports based on pr
 
 *   **POST /api/cache/clear-all:** Clear all cached PDFs.
     *   **Response:** Success message.
+
+*   **DELETE /api/data/privacy/:project_id:** GDPR: Delete all data related to a project (right to erasure).
+    *   **Parameters:** `project_id` (UUID) - The ID of the project to delete data for.
+    *   **Response:** Success message.
+
+*   **GET /api/data/export/:project_id:** GDPR: Export all data related to a project (right to data portability).
+    *   **Parameters:** `project_id` (UUID) - The ID of the project to export data for.
+    *   **Response:** JSON object containing exported project data.
 
 *   **GET /health:** A health check endpoint that verifies database connectivity.
     *   **Response:** JSON with status and service information.
@@ -77,6 +85,20 @@ It is recommended to use a `.env` file for local development.
     The service will run on `http://0.0.0.0:5002`.
 
 ### Docker
+
+This service is part of a larger microservices architecture managed by `docker-compose.yml` at the project root. To run the entire stack:
+
+1.  **Navigate to the project root directory:**
+    ```bash
+    cd ../..
+    ```
+2.  **Bring up the Docker Compose stack:**
+    ```bash
+    docker compose up -d --build
+    ```
+    *Ensure your `.env` file at the project root is correctly configured as described above.*
+
+Alternatively, to run only this service with Docker (for isolated testing/development):
 
 1.  **Navigate to the service directory:**
     ```bash

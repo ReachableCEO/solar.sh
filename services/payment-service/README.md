@@ -8,7 +8,7 @@ This service is responsible for handling payments with Stripe and updating proje
     *   **Request Body:** `{"project_id": "unique_id"}`
     *   **Response:** `{"checkout_url": "https://checkout.stripe.com/..."}`
 
-*   **POST /webhooks/stripe:** Receives and processes webhook events from Stripe, primarily to update the payment status of projects.
+*   **POST /webhooks/stripe:** Receives and processes webhook events from Stripe, primarily to update the payment status of projects. This endpoint is exposed via the API Gateway.
     *   This endpoint verifies the webhook signature for security.
 
 *   **GET /health:** A basic health check endpoint that also verifies database connectivity.
@@ -63,6 +63,20 @@ It is recommended to use a `.env` file for local development.
     The service will run on `http://0.0.0.0:5003`.
 
 ### Docker
+
+This service is part of a larger microservices architecture managed by `docker-compose.yml` at the project root. To run the entire stack:
+
+1.  **Navigate to the project root directory:**
+    ```bash
+    cd ../..
+    ```
+2.  **Bring up the Docker Compose stack:**
+    ```bash
+    docker compose up -d --build
+    ```
+    *Ensure your `.env` file at the project root is correctly configured as described above.*
+
+Alternatively, to run only this service with Docker (for isolated testing/development):
 
 1.  **Navigate to the service directory:**
     ```bash
