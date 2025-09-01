@@ -2,9 +2,12 @@ version: '3.8'
 
 services:
   api-gateway:
-    build: ./api-gateway
+    build: ./services/api-gateway
     ports:
       - "9080:9080"
+    depends_on:
+      db:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9080"]
       interval: 30s
@@ -12,7 +15,12 @@ services:
       retries: 3
 
   calculation-service:
-    build: ./calculation-service
+    build: ./services/calculation-service
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env # Assuming .env contains DATABASE_URL for calculation-service
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
       interval: 30s
@@ -20,7 +28,12 @@ services:
       retries: 3
 
   pdf-generation-service:
-    build: ./pdf-generation-service
+    build: ./services/pdf-generation-service
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env # Assuming .env contains DATABASE_URL for pdf-generation-service
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5002/health"]
       interval: 30s
@@ -28,7 +41,12 @@ services:
       retries: 3
 
   payment-service:
-    build: ./payment-service
+    build: ./services/payment-service
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env # Assuming .env contains STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, DATABASE_URL etc.
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5003/health"]
       interval: 30s
@@ -36,7 +54,12 @@ services:
       retries: 3
 
   frontend:
-    build: ./frontend
+    build: ./services/frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      api-gateway:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
       interval: 30s
@@ -49,8 +72,14 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-solcalc}
       POSTGRES_USER: ${POSTGRES_USER:-user}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+    volumes:
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    ports:
+      - "5432:5432" # Expose DB port for local access if needed
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user -d solcalc"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-user} -d ${POSTGRES_DB:-solcalc}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
