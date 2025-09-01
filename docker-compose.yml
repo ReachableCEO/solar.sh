@@ -2,37 +2,55 @@ version: '3.8'
 
 services:
   api-gateway:
-    image: apache/apisix:3.5.0-debian
-    volumes:
-      - ./api-gateway/config.yaml:/usr/local/apisix/conf/config.yaml:ro
+    build: ./api-gateway
     ports:
       - "9080:9080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9080"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   calculation-service:
     build: ./calculation-service
-    ports:
-      - "5001:5001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   pdf-generation-service:
     build: ./pdf-generation-service
-    ports:
-      - "5002:5002"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   payment-service:
     build: ./payment-service
-    ports:
-      - "5003:5003"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   frontend:
     build: ./frontend
-    ports:
-      - "3000:3000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   db:
     image: postgis/postgis:15-3.3
     environment:
-      POSTGRES_DB: solcalc
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-    ports:
-      - "5432:5432"
+      POSTGRES_DB: ${POSTGRES_DB:-solcalc}
+      POSTGRES_USER: ${POSTGRES_USER:-user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d solcalc"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
