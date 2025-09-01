@@ -1,0 +1,31 @@
+# General ignores
+.DS_Store
+.env
+.vscode/
+.idea/
+*.log
+*.swp
+*~
+#*#
+
+# Python ignores
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Node.js ignores
+node_modules/
+build/
+dist/
+.parcel-cache/
+
+# Docker ignores
+*.swp
+*.swo

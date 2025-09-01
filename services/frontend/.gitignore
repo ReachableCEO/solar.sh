@@ -1,0 +1,12 @@
+# Node.js ignores for frontend
+node_modules/
+build/
+dist/
+.parcel-cache/
+
+# General ignores
+.DS_Store
+*.log
+*.swp
+*~
+#*#

@@ -1,0 +1,6 @@
+# General ignores for api-gateway
+.DS_Store
+*.log
+*.swp
+*~
+#*#
