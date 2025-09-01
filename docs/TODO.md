@@ -1,66 +1,54 @@
-# TODO
+# Project TODO List
 
 This file tracks the remaining tasks for the Sol-Calc project.
 
-## SECRETS MANAGEMENT
+## Core Service Implementation
 
-### Vault Configuration
+*   **Calculation Service:**
+    *   Implement LIDAR data processing (parsing, storage in PostGIS).
+    *   Develop solar modeling algorithms (PVLib integration, energy yield, shading analysis).
+    *   Define and persist calculation results.
+*   **PDF Generation Service:**
+    *   Implement logic to retrieve project and calculation data from the database.
+    *   Develop PDF templating (e.g., Jinja2).
+    *   Integrate PDF rendering (e.g., WeasyPrint).
+*   **API Gateway (Apache APISIX):**
+    *   Configure dynamic routing for all microservices.
+    *   Implement rate limiting.
+    *   Develop custom Lua plugin or serverless function for payment gating for PDF downloads.
 
-1.  **Enable AppRole Auth Method:**
-    ```bash
-    vault auth enable approle
-    ```
+## Frontend Development
 
-2.  **Create a Policy for the Application:**
-    ```bash
-    vault policy write sol-calc-app - <<EOF
-    path "secret/data/sol-calc/database" {
-      capabilities = ["read"]
-    }
-    path "secret/data/sol-calc/stripe" {
-      capabilities = ["read"]
-    }
-    EOF
-    ```
+*   Design and implement the multi-step data wizard UI (React/Vue).
+*   Integrate 3D visualizer (three.js) for LIDAR data and panel positioning.
+*   Implement asynchronous processing feedback and status polling.
+*   Integrate with `/api/checkout` for payment flow.
+*   Implement PDF download functionality.
 
-3.  **Create the AppRole:**
-    ```bash
-    vault write auth/approle/role/sol-calc-app \
-        secret_id_ttl=10m \
-        token_num_uses=10 \
-        token_ttl=20m \
-        token_max_ttl=30m \
-        secret_id_num_uses=40 \
-        policies="sol-calc-app"
-    ```
+## Database & Data Management
 
-4.  **Get the RoleID:**
-    ```bash
-    vault read auth/approle/role/sol-calc-app/role-id
-    ```
+*   Finalize PostgreSQL/PostGIS database schema for all entities (projects, calculations, LIDAR data).
+*   Implement robust database connection management (e.g., connection pooling).
 
-5.  **Get a SecretID:**
-    ```bash
-    vault write -f auth/approle/role/sol-calc-app/secret-id
-    ```
+## Deployment & Infrastructure
 
-6.  **Create the Secrets:**
-    ```bash
-    vault kv put secret/sol-calc/database \
-        POSTGRES_DB=solcalc \
-        POSTGRES_USER=user \
-        POSTGRES_PASSWORD=password
+*   **Secrets Management (Vault):**
+    *   Enable AppRole Auth Method.
+    *   Create a Policy for the Application.
+    *   Create the AppRole.
+    *   Get the RoleID and SecretID.
+    *   Create the Secrets (database credentials, Stripe API keys).
+*   **Deployment (Coolify/Docker Compose):**
+    *   Update `docker-compose.yml` to include all services and necessary configurations.
+    *   Add Vault Agent sidecar containers to services requiring secrets.
+    *   Configure shared volumes for secrets.
+    *   Document deployment instructions and required environment variables.
 
-    vault kv put secret/sol-calc/stripe \
-        STRIPE_API_KEY=your_stripe_api_key
-    ```
+## Quality Assurance & Operations
 
-## COOLIFY DEPLOYMENT
-
-1.  **Update `docker-compose.yml`:**
-    *   Add Vault Agent sidecar containers to the `payment-service` and `db` services.
-    *   Add a shared volume for the secrets.
-    *   Configure the application services to source the secrets from the shared volume.
-
-2.  **Provide Deployment Instructions:**
-    *   Document the required environment variables for deployment (`VAULT_ADDR`, `VAULT_ROLE_ID`, `VAULT_SECRET_ID`).
+*   Implement comprehensive unit, integration, and end-to-end tests for all services.
+*   Set up CI/CD pipelines for automated testing and deployment.
+*   Conduct security audits and penetration testing.
+*   Perform performance testing and optimization.
+*   Establish robust logging, monitoring, and alerting systems.
+*   Define and implement data retention policies (GDPR compliance).
