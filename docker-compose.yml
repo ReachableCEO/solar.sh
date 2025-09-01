@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    image: apache/apisix:3.5.0-debian
+    volumes:
+      - ./api-gateway/config.yaml:/usr/local/apisix/conf/config.yaml:ro
+    ports:
+      - "9080:9080"
+
+  calculation-service:
+    build: ./calculation-service
+    ports:
+      - "5001:5001"
+
+  pdf-generation-service:
+    build: ./pdf-generation-service
+    ports:
+      - "5002:5002"
+
+  payment-service:
+    build: ./payment-service
+    ports:
+      - "5003:5003"
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+
+  db:
+    image: postgis/postgis:15-3.3
+    environment:
+      POSTGRES_DB: solcalc
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"

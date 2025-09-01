@@ -1,0 +1,34 @@
+apisix:
+  # Enable the proxy protocol to get the real client IP
+  enable_proxy_protocol: true
+  # Set the proxy protocol header
+  proxy_protocol_header: "X-Real-IP"
+
+# Add a route for the calculation service
+routes:
+  - uri: /api/calculate
+    upstream:
+      nodes:
+        "calculation-service:5001": 1
+      type: roundrobin
+
+# Add a route for the checkout service
+  - uri: /api/checkout
+    upstream:
+      nodes:
+        "payment-service:5003": 1
+      type: roundrobin
+
+# Add a route for the download service
+  - uri: /api/download/*
+    upstream:
+      nodes:
+        "pdf-generation-service:5002": 1
+      type: roundrobin
+
+# Add a route for the frontend
+  - uri: /
+    upstream:
+      nodes:
+        "frontend:3000": 1
+      type: roundrobin
