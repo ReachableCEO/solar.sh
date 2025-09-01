@@ -33,7 +33,7 @@ This file outlines the development plan for the PostgreSQL/PostGIS database.
 
 *   **Objective:** Implement robust database management practices for production readiness.
 *   **Tasks:**
-    *   Integrate database connection pooling into microservices.
+    *   Integrate database connection pooling into microservices: (Future Enhancement - basic connection management is in place).
     *   Set up automated backup and restore procedures.
     *   Implement comprehensive database monitoring and alerting.
     *   Strengthen database security measures (e.g., user roles, access control).

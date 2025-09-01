@@ -21,30 +21,18 @@ This phase focuses on implementing the foundational backend microservices.
     *   Calculate annual energy yield, shading losses, and optimal panel placement.
     *   Persist calculation results and project metadata in the PostgreSQL database.
 
-### `pdf-generation-service`
+### `pdf-generation-service` (Completed)
 
-*   **Objective:** To generate comprehensive PDF reports based on calculation results.
-*   **Key Tasks:**
-    *   Retrieve all necessary calculation results and project metadata from the PostgreSQL database.
-    *   Utilize a templating engine (e.g., Jinja2) to create dynamic HTML/CSS report layouts.
-    *   Render the HTML to a PDF using a library like WeasyPrint.
-    *   Provide the generated PDF as a file download.
+*   **Status:** Core implementation complete. Generates comprehensive PDF reports based on calculation results, utilizing Jinja2 for templating and WeasyPrint for rendering. Provides the generated PDF as a file download.
 
 ### API Gateway (Apache APISIX)
 
 *   **Objective:** To serve as the single entry point for all API traffic, handling routing, security, and payment gating.
-*   **Key Tasks:**
-    *   Configure dynamic routing rules to direct traffic to the appropriate microservices (`/api/calculate`, `/api/checkout`, `/api/download/:project_id`).
-    *   Implement rate limiting to protect backend services.
-    *   Develop a custom Lua plugin or serverless function to enforce payment gating for PDF downloads, performing a fast database lookup for project status.
+*   **Status:** Dynamic routing, rate limiting, and the custom Lua plugin for payment gating are implemented. However, the service currently experiences intermittent startup issues related to etcd connectivity, requiring further investigation for full robustness in a Docker Compose environment.
 
-### Database (PostgreSQL/PostGIS)
+### Database (PostgreSQL/PostGIS) (Completed)
 
-*   **Objective:** To store all project, calculation, and payment-related data, including geospatial LIDAR data.
-*   **Key Tasks:**
-    *   Finalize the database schema for `projects`, `calculations`, and other related tables.
-    *   Ensure proper indexing and optimization for performance.
-    *   Implement secure database connection management.
+*   **Status:** The database schema for `projects` and `calculations` is finalized and implemented. Secure connection management is in place, and PostGIS is enabled for geospatial data handling.
 
 ## Phase 2: Frontend Application
 

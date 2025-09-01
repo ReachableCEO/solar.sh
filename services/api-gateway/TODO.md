@@ -2,7 +2,7 @@
 
 This file tracks specific tasks for the Apache APISIX API Gateway.
 
-## Core Configuration
+## Core Configuration (Completed)
 
 *   Configure dynamic routing for all microservices:
     *   `/api/calculate` -> Calculation Service
@@ -11,7 +11,7 @@ This file tracks specific tasks for the Apache APISIX API Gateway.
     *   `/webhooks/stripe` -> Stripe Payment Service
 *   Implement rate limiting to protect backend services from abuse.
 
-## Payment Gating
+## Payment Gating (Completed)
 
 *   Develop a custom Lua plugin or serverless function within APISIX to enforce payment gating for PDF downloads (`/api/download/:project_id`).
     *   This plugin/function must perform a fast database lookup to verify that the `project_id` has a "paid" status.

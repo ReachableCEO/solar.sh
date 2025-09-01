@@ -22,7 +22,7 @@ This file tracks specific tasks for the Frontend Single Page Application (SPA).
     *   Call `POST /api/calculate` to initiate solar calculations.
     *   Call `POST /api/checkout` to initiate the payment flow with the Payment Service.
     *   Handle the payment redirect from Stripe.
-    *   Call `GET /api/download/:project_id` to download the generated PDF report.
+    *   Call `GET /api/download/:project_id` to download the generated PDF report (backend PDF service is ready).
 
 ## User Experience (UX) & Design
 

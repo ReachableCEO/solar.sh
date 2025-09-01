@@ -10,7 +10,7 @@ This file tracks specific tasks for the PostgreSQL/PostGIS database.
 
 ## Database Operations & Management
 
-*   **Connection Pooling:** Implement robust database connection pooling for all microservices interacting with the database to optimize resource usage and performance.
+*   **Connection Pooling:** (Future Enhancement) Implement robust database connection pooling for all microservices interacting with the database to optimize resource usage and performance.
 *   **Backup and Restore:** Establish a clear strategy and automated processes for database backups and restores.
 *   **Monitoring:** Set up comprehensive monitoring for database performance, health, and resource utilization.
 *   **Security:** Implement and enforce strong database security measures (e.g., least privilege, encryption at rest and in transit).

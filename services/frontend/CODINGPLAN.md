@@ -28,7 +28,7 @@ This file outlines the development plan for the Frontend Single Page Application
 *   **Tasks:**
     *   Integrate with the `payment-service` by calling `POST /api/checkout`.
     *   Handle the redirect to and from Stripe's checkout page.
-    *   Implement the functionality to call `GET /api/download/:project_id` and handle the PDF file download.
+    *   Implement the functionality to call `GET /api/download/:project_id` and handle the PDF file download (backend PDF service is ready for integration).
 
 ## Phase 4: UI/UX Refinements and Advanced Features
 

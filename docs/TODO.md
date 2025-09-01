@@ -8,14 +8,14 @@ This file tracks the remaining tasks for the Sol-Calc project.
     *   Implement LIDAR data processing (parsing, storage in PostGIS).
     *   Develop solar modeling algorithms (PVLib integration, energy yield, shading analysis).
     *   Define and persist calculation results.
-*   **PDF Generation Service:**
+*   **PDF Generation Service:** Completed
     *   Implement logic to retrieve project and calculation data from the database.
     *   Develop PDF templating (e.g., Jinja2).
     *   Integrate PDF rendering (e.g., WeasyPrint).
 *   **API Gateway (Apache APISIX):**
-    *   Configure dynamic routing for all microservices.
-    *   Implement rate limiting.
-    *   Develop custom Lua plugin or serverless function for payment gating for PDF downloads.
+    *   Configure dynamic routing for all microservices: Implemented.
+    *   Implement rate limiting: Implemented.
+    *   Develop custom Lua plugin or serverless function for payment gating for PDF downloads: Implemented. (Note: Startup robustness in Docker Compose requires further investigation).
 
 ## Frontend Development
 
@@ -27,8 +27,8 @@ This file tracks the remaining tasks for the Sol-Calc project.
 
 ## Database & Data Management
 
-*   Finalize PostgreSQL/PostGIS database schema for all entities (projects, calculations, LIDAR data).
-*   Implement robust database connection management (e.g., connection pooling).
+*   Finalize PostgreSQL/PostGIS database schema for all entities (projects, calculations, LIDAR data): Finalized for projects and calculations.
+*   Implement robust database connection management (e.g., connection pooling): Implemented basic connection management. Connection pooling can be enhanced.
 
 ## Deployment & Infrastructure
 
