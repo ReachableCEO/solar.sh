@@ -6,19 +6,12 @@ services:
     ports:
       - "9080:9080"
     depends_on:
-      db:
-        condition: service_healthy
-      etcd:
-        condition: service_healthy
-    environment:
-      APISIX_ETCD_HOST: etcd:2379
-      PG_HOST: db
-      PG_PORT: 5432
-      PG_USER: ${POSTGRES_USER:-user}
-      PG_PASSWORD: ${POSTGRES_PASSWORD:-password}
-      PG_DBNAME: ${POSTGRES_DB:-solcalc}
+      - calculation-service
+      - pdf-generation-service
+      - payment-service
+      - frontend
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9080"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9080/health"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -74,27 +67,12 @@ services:
     build: ./services/frontend
     ports:
       - "3000:3000"
-    depends_on:
-      api-gateway:
-        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
       interval: 30s
       timeout: 10s
       retries: 3
 
-  etcd:
-    image: bitnami/etcd:latest
-    environment:
-      ALLOW_NONE_AUTHENTICATION: "yes"
-      ETCD_ADVERTISE_CLIENT_URLS: http://etcd:2379
-      ETCD_LISTEN_CLIENT_URLS: http://0.0.0.0:2379
-    healthcheck:
-      test: ["CMD", "etcdctl", "endpoint", "health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
 
   db:
     image: postgis/postgis:15-3.3

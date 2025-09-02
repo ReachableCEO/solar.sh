@@ -6,10 +6,10 @@ This document outlines the development plan for the Sol-Calc project, organized 
 
 This phase focuses on implementing the foundational backend microservices.
 
-### `payment-service` (Completed)
+### `payment-service`
 
-*   **Status:** Core implementation complete. Integrates with Stripe for checkout sessions and handles webhooks to update payment status in the database. Enhanced for security and compliance.
-*   **Next Steps:** Ongoing maintenance, minor enhancements, and integration with the frontend.
+*   **Status:** In Progress. Integrates with Stripe for checkout sessions and handles webhooks to update payment status in the database. 
+*   **Next Steps:** Needs to be fully integrated with the frontend.
 
 ### `calculation-service`
 
@@ -21,18 +21,24 @@ This phase focuses on implementing the foundational backend microservices.
     *   Calculate annual energy yield, shading losses, and optimal panel placement.
     *   Persist calculation results and project metadata in the PostgreSQL database.
 
-### `pdf-generation-service` (Completed)
+### `pdf-generation-service`
 
-*   **Status:** Core implementation complete. Generates comprehensive PDF reports based on calculation results, utilizing Jinja2 for templating and WeasyPrint for rendering. Provides the generated PDF as a file download.
+*   **Status:** In Progress. Generates comprehensive PDF reports based on calculation results, utilizing Jinja2 for templating and WeasyPrint for rendering. Provides the generated PDF as a file download.
+*   **Next Steps:** Payment gating logic needs to be removed from this service and moved to the API Gateway.
 
 ### API Gateway (Apache APISIX)
 
 *   **Objective:** To serve as the single entry point for all API traffic, handling routing, security, and payment gating.
-*   **Status:** Dynamic routing, rate limiting, and the custom Lua plugin for payment gating are implemented. However, the service currently experiences intermittent startup issues related to etcd connectivity, requiring further investigation for full robustness in a Docker Compose environment.
+*   **Status:** Not started. The previous implementation was done in Nginx and needs to be reverted to APISIX.
+*   **Key Tasks:**
+    *   Implement dynamic routing.
+    *   Implement rate limiting.
+    *   Implement the custom Lua plugin for payment gating.
 
-### Database (PostgreSQL/PostGIS) (Completed)
+### Database (PostgreSQL/PostGIS)
 
-*   **Status:** The database schema for `projects` and `calculations` is finalized and implemented. Secure connection management is in place, and PostGIS is enabled for geospatial data handling.
+*   **Status:** In Progress. The database schema for `projects` and `calculations` is finalized. 
+*   **Next Steps:** The initial Alembic migration needs to be applied.
 
 ## Phase 2: Frontend Application
 

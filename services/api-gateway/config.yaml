@@ -1,12 +1,3 @@
-apisix:
-  # Enable the proxy protocol to get the real client IP
-  enable_proxy_protocol: true
-  # Set the proxy protocol header
-  proxy_protocol_header: "X-Real-IP"
-
-plugins:
-  - payment-gate
-
 deployment:
   role: traditional
   role_traditional:
@@ -16,40 +7,10 @@ etcd:
   host:
     - "http://etcd:2379"
 
-# Add a route for the calculation service
-routes:
-  - uri: /api/calculate
-    upstream:
-      nodes:
-        "calculation-service:5001": 1
-      type: roundrobin
-
-# Add a route for the checkout service
-  - uri: /api/checkout
-    upstream:
-      nodes:
-        "payment-service:5003": 1
-      type: roundrobin
-
-# Add a route for Stripe webhooks
-  - uri: /webhooks/stripe
-    upstream:
-      nodes:
-        "payment-service:5003": 1
-      type: roundrobin
-
-# Add a route for the download service
-  - uri: /api/download/*
-    plugins:
-      payment-gate: ~
-    upstream:
-      nodes:
-        "pdf-generation-service:5002": 1
-      type: roundrobin
-
-# Add a route for the frontend
-  - uri: /
-    upstream:
-      nodes:
-        "frontend:3000": 1
-      type: roundrobin
+apisix:
+  node_listen: 9080
+  enable_admin: true
+  admin_key:
+    - name: "admin"
+      key: "edd1c9f034335f136f87ad84b625c8f1"
+      role: admin
